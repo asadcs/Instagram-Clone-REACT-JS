@@ -61,12 +61,17 @@ function App() {
     e.preventDefault();
     auth
       .createUserWithEmailAndPassword(email, password)
+      .then((authUser)=>{
+        authUser.user.updateProfile({
+          displayName:username
+        })
+      })
       .catch((error) => alert(error.message));
 
     // alert("Successfully logged in");
   };
   useEffect(() => {
-    auth.onAuthStateChanged((authUser) => {
+    const unsubscribe  = auth.onAuthStateChanged((authUser) => {
       if (authUser) {
         //user has logged in
         console.log(authUser);
@@ -87,7 +92,11 @@ function App() {
         setUser(null);
       }
     });
-  }, []);
+
+    return()=>{
+      unsubscribe();
+    }
+  }, [user,username]);
 
   useEffect(() => {
     // run once when the app component loads
