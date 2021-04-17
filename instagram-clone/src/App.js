@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import Post from "./Post";
 import firebase from "firebase";
-import db from "./firebase";
+import { db, auth } from "./firebase";
 import { Button, Input, makeStyles, Modal } from "@material-ui/core";
 
 function getModalStyle() {
@@ -35,6 +35,7 @@ function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([
     // {
     //   username: "Asad",
@@ -54,6 +55,39 @@ function App() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleSignup = (e) => {
+    //setOpen(false);
+    e.preventDefault();
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .catch((error) => alert(error.message));
+
+    // alert("Successfully logged in");
+  };
+  useEffect(() => {
+    auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        //user has logged in
+        console.log(authUser);
+        setUser(authUser);
+
+        if(authUser.displayName)
+        {
+
+        }
+        else
+        {
+          return authUser.updateProfile({
+            displayName : username
+          })
+        }
+      } else {
+        //user has logged out
+        setUser(null);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     // run once when the app component loads
@@ -91,40 +125,45 @@ function App() {
 
       <Modal open={open} onClose={handleClose}>
         <div style={modalStyle} className={classes.paper}>
-          <div className="app__headerImage">
-            <center>
-              <img
-                alt="Instagram"
-                height="70px"
-                src="https://upload.wikimedia.org/wikipedia/commons/0/06/%C4%B0nstagram-Profilime-Kim-Bakt%C4%B1-1.png"
-              ></img>
+          <form onSubmit={handleSignup} className="app__signup">
+            <div className="app__headerImage">
+              <center>
+                <img
+                  alt="Instagram"
+                  height="70px"
+                  src="https://upload.wikimedia.org/wikipedia/commons/0/06/%C4%B0nstagram-Profilime-Kim-Bakt%C4%B1-1.png"
+                ></img>
 
-              <Input
-                placeholder="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              ></Input>
+                <Input
+                  placeholder="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  variant="outlined"
+                ></Input>
 
-              <Input
-                placeholder="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              ></Input>
+                <Input
+                  placeholder="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  variant="outlined"
+                ></Input>
 
-              <Input
-                placeholder="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              ></Input>
-            </center>
-          </div>
+                <Input
+                  placeholder="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  variant="outlined"
+                ></Input>
 
-          <Button type="button" onClick={handleClose}>
-            close
-          </Button>
-          <Button type="button" onClick={handleClose}>
-            close
-          </Button>
+                <Button type="submit" onClick={handleSignup}>
+                  Signup
+                </Button>
+                <Button type="button" onClick={handleClose}>
+                  Cancel
+                </Button>
+              </center>
+            </div>
+          </form>
         </div>
       </Modal>
       <Button type="button" onClick={handleOpen}>
