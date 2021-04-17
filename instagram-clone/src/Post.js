@@ -1,7 +1,7 @@
 import React from "react";
 import "./Post.css";
 import { Avatar } from "@material-ui/core";
-import { Button } from "@material-ui/core";
+
 
 function Post({username,caption,imageUrl}) {
   return (
