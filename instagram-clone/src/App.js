@@ -31,7 +31,7 @@ function App() {
   const classes = useStyles();
   const [modalStyle] = useState(getModalStyle);
 
-  const [open, setOpen] = useState(false);
+  const [openSignUp, setOpenSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
@@ -49,15 +49,28 @@ function App() {
     //   imageUrl: "https://homepages.cae.wisc.edu/~ece533/images/boat.png",
     // },
   ]);
-  const handleOpen = () => {
-    setOpen(true);
+  const handleOpenPopupSignIn = () => {
+    setOpenSignIn(true);
+  };
+  const handleOpenPopupSignUp = () => {
+    setOpenSignUp(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleClosePopupSignIn = () => {
+    setOpenSignIn(false);
+  };
+  const handleClosePopupSignUp = () => {
+    setOpenSignUp(false);
   };
 
-  const handleSignup = (e) => {
+  const handleSignInProcess=(e)=>{
+    e.preventDefault();
+    auth
+    .signInWithEmailAndPassword(email,password)
+    .catch((error)=>alert(error.message))
+    setOpenSignIn(false)
+  }
+  const handleSignupProcess = (e) => {
     //setOpen(false);
     e.preventDefault();
     auth
@@ -68,7 +81,7 @@ function App() {
         });
       })
       .catch((error) => alert(error.message));
-
+      setOpenSignUp(false)
     // alert("Successfully logged in");
   };
   useEffect(() => {
@@ -126,10 +139,10 @@ function App() {
         </Button>
       ) : (
         <div>
-           <Button type="button" onClick={handleOpen}>
+           <Button type="button" onClick={handleOpenPopupSignIn}>
           SignIn
         </Button>
-        <Button type="button" onClick={handleOpen}>
+        <Button type="button" onClick={handleOpenPopupSignUp}>
           Signup
         </Button>
         </div>
@@ -143,9 +156,9 @@ function App() {
         ></Post>
       ))}
 
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={openSignUp} onClose={handleClosePopupSignUp}>
         <div style={modalStyle} className={classes.paper}>
-          <form onSubmit={handleSignup} className="app__signup">
+          <form onSubmit={handleSignupProcess} className="app__signup">
             <div className="app__headerImage">
               <center>
                 <img
@@ -175,10 +188,12 @@ function App() {
                   variant="outlined"
                 ></Input>
 
-                <Button type="submit" onClick={handleSignup}>
+                <Button type="submit" 
+                // onClick={handleSignupProcess}
+                >
                   Signup
                 </Button>
-                <Button type="button" onClick={handleClose}>
+                <Button type="button" onClick={handleClosePopupSignUp}>
                   Cancel
                 </Button>
               </center>
@@ -187,6 +202,47 @@ function App() {
         </div>
       </Modal>
 
+      <Modal open={openSignIn} onClose={handleClosePopupSignIn}>
+        <div style={modalStyle} className={classes.paper}>
+          <form onSubmit={handleSignInProcess} className="app__signup">
+            <div className="app__headerImage">
+              <center>
+                <img
+                  alt="Instagram"
+                  height="70px"
+                  src="https://upload.wikimedia.org/wikipedia/commons/0/06/%C4%B0nstagram-Profilime-Kim-Bakt%C4%B1-1.png"
+                ></img>
+
+
+                <Input
+                  placeholder="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  variant="outlined"
+                ></Input>
+
+                <Input
+                  placeholder="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  variant="outlined"
+                ></Input>
+
+                <Button type="submit" 
+                // onClick={handleSignInProcess}
+                >
+                  SignIn
+                </Button>
+                <Button type="button" onClick={handleClosePopupSignIn}>
+                  Cancel
+                </Button>
+              </center>
+            </div>
+          </form>
+        </div>
+      </Modal>
+
+      
       {/* <Post
         username="Asad"
         caption="Wow"
