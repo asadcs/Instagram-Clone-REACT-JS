@@ -36,6 +36,7 @@ function App() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
+  const [openSignIn, setOpenSignIn] = useState(false)
   const [posts, setPosts] = useState([
     // {
     //   username: "Asad",
@@ -61,42 +62,38 @@ function App() {
     e.preventDefault();
     auth
       .createUserWithEmailAndPassword(email, password)
-      .then((authUser)=>{
-        authUser.user.updateProfile({
-          displayName:username
-        })
+      .then((authUser) => {
+        return authUser.user.updateProfile({
+          displayName: username,
+        });
       })
       .catch((error) => alert(error.message));
 
     // alert("Successfully logged in");
   };
   useEffect(() => {
-    const unsubscribe  = auth.onAuthStateChanged((authUser) => {
+    const unsubscribe = auth.onAuthStateChanged((authUser) => {
       if (authUser) {
         //user has logged in
         console.log(authUser);
         setUser(authUser);
 
-        if(authUser.displayName)
-        {
-
-        }
-        else
-        {
-          return authUser.updateProfile({
-            displayName : username
-          })
-        }
+        // if (authUser.displayName) {
+        // } else {
+        //   return authUser.updateProfile({
+        //     displayName: username,
+        //   });
+        // }
       } else {
         //user has logged out
         setUser(null);
       }
     });
 
-    return()=>{
+    return () => {
       unsubscribe();
-    }
-  }, [user,username]);
+    };
+  }, [user, username]);
 
   useEffect(() => {
     // run once when the app component loads
@@ -123,6 +120,20 @@ function App() {
         ></img>
       </div>
 
+      {user ? (
+        <Button type="button" onClick={()=>auth.signOut()}>
+          Logout
+        </Button>
+      ) : (
+        <div>
+           <Button type="button" onClick={handleOpen}>
+          SignIn
+        </Button>
+        <Button type="button" onClick={handleOpen}>
+          Signup
+        </Button>
+        </div>
+      )}
       {posts.map(({ id, post }) => (
         <Post
           key={id}
@@ -175,9 +186,6 @@ function App() {
           </form>
         </div>
       </Modal>
-      <Button type="button" onClick={handleOpen}>
-        open
-      </Button>
 
       {/* <Post
         username="Asad"
