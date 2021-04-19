@@ -4,6 +4,7 @@ import Post from "./Post";
 import firebase from "firebase";
 import { db, auth } from "./firebase";
 import { Button, Input, makeStyles, Modal } from "@material-ui/core";
+import ImageUpload from "./ImageUpload";
 
 function getModalStyle() {
   const top = 50;
@@ -36,7 +37,7 @@ function App() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
-  const [openSignIn, setOpenSignIn] = useState(false)
+  const [openSignIn, setOpenSignIn] = useState(false);
   const [posts, setPosts] = useState([
     // {
     //   username: "Asad",
@@ -63,13 +64,13 @@ function App() {
     setOpenSignUp(false);
   };
 
-  const handleSignInProcess=(e)=>{
+  const handleSignInProcess = (e) => {
     e.preventDefault();
     auth
-    .signInWithEmailAndPassword(email,password)
-    .catch((error)=>alert(error.message))
-    setOpenSignIn(false)
-  }
+      .signInWithEmailAndPassword(email, password)
+      .catch((error) => alert(error.message));
+    setOpenSignIn(false);
+  };
   const handleSignupProcess = (e) => {
     //setOpen(false);
     e.preventDefault();
@@ -81,7 +82,7 @@ function App() {
         });
       })
       .catch((error) => alert(error.message));
-      setOpenSignUp(false)
+    setOpenSignUp(false);
     // alert("Successfully logged in");
   };
   useEffect(() => {
@@ -125,6 +126,12 @@ function App() {
 
   return (
     <div className="app">
+      {user?.displayName ? (
+        <ImageUpload username={user.displayName} />
+      ) : (
+        <h1>Sorry you need to login</h1>
+      )}
+
       <div className="app__headerImage">
         <img
           alt="Instagram"
@@ -134,17 +141,17 @@ function App() {
       </div>
 
       {user ? (
-        <Button type="button" onClick={()=>auth.signOut()}>
+        <Button type="button" onClick={() => auth.signOut()}>
           Logout
         </Button>
       ) : (
         <div>
-           <Button type="button" onClick={handleOpenPopupSignIn}>
-          SignIn
-        </Button>
-        <Button type="button" onClick={handleOpenPopupSignUp}>
-          Signup
-        </Button>
+          <Button type="button" onClick={handleOpenPopupSignIn}>
+            SignIn
+          </Button>
+          <Button type="button" onClick={handleOpenPopupSignUp}>
+            Signup
+          </Button>
         </div>
       )}
       {posts.map(({ id, post }) => (
@@ -188,8 +195,9 @@ function App() {
                   variant="outlined"
                 ></Input>
 
-                <Button type="submit" 
-                // onClick={handleSignupProcess}
+                <Button
+                  type="submit"
+                  // onClick={handleSignupProcess}
                 >
                   Signup
                 </Button>
@@ -213,7 +221,6 @@ function App() {
                   src="https://upload.wikimedia.org/wikipedia/commons/0/06/%C4%B0nstagram-Profilime-Kim-Bakt%C4%B1-1.png"
                 ></img>
 
-
                 <Input
                   placeholder="email"
                   value={email}
@@ -228,8 +235,9 @@ function App() {
                   variant="outlined"
                 ></Input>
 
-                <Button type="submit" 
-                // onClick={handleSignInProcess}
+                <Button
+                  type="submit"
+                  // onClick={handleSignInProcess}
                 >
                   SignIn
                 </Button>
@@ -242,7 +250,6 @@ function App() {
         </div>
       </Modal>
 
-      
       {/* <Post
         username="Asad"
         caption="Wow"
