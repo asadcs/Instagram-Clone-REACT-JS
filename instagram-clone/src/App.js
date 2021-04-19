@@ -112,7 +112,7 @@ function App() {
   useEffect(() => {
     // run once when the app component loads
     db.collection("posts")
-      // .orderBy("timestamp", "desc")
+       .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {
         setPosts(
           snapshot.docs.map((doc) => ({
