@@ -5,11 +5,19 @@
   background-color: #fafafa;
   height: 100vh;
 }
-.app__headerImage{
+.app__header{
   background-color: white;
   border-bottom: 1px solid lightgray;
   padding:0px;
   object-fit: contain;
+  display: flex;
+  justify-content: space-between;
+  
+  
+}
+.app__headerImage{
+  object-fit: contain;
+
   
 }
 

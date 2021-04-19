@@ -112,7 +112,7 @@ function App() {
   useEffect(() => {
     // run once when the app component loads
     db.collection("posts")
-       .orderBy("timestamp", "desc")
+      .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {
         setPosts(
           snapshot.docs.map((doc) => ({
@@ -126,34 +126,29 @@ function App() {
 
   return (
     <div className="app">
-      {user?.displayName ? (
-        <ImageUpload username={user.displayName} />
-      ) : (
-        <h1>Sorry you need to login</h1>
-      )}
-
-      <div className="app__headerImage">
-        <img
+      <div className="app__header">
+        <img className="app__headerImage"
           alt="Instagram"
           height="70px"
           src="https://upload.wikimedia.org/wikipedia/commons/0/06/%C4%B0nstagram-Profilime-Kim-Bakt%C4%B1-1.png"
         ></img>
+
+        {user ? (
+          <Button type="button" onClick={() => auth.signOut()}>
+            Logout
+          </Button>
+        ) : (
+          <div>
+            <Button type="button" onClick={handleOpenPopupSignIn}>
+              SignIn
+            </Button>
+            <Button type="button" onClick={handleOpenPopupSignUp}>
+              Signup
+            </Button>
+          </div>
+        )}
       </div>
 
-      {user ? (
-        <Button type="button" onClick={() => auth.signOut()}>
-          Logout
-        </Button>
-      ) : (
-        <div>
-          <Button type="button" onClick={handleOpenPopupSignIn}>
-            SignIn
-          </Button>
-          <Button type="button" onClick={handleOpenPopupSignUp}>
-            Signup
-          </Button>
-        </div>
-      )}
       {posts.map(({ id, post }) => (
         <Post
           key={id}
@@ -271,6 +266,11 @@ function App() {
       {/* Header */}
 
       {/* Posts */}
+      {user?.displayName ? (
+        <ImageUpload username={user.displayName} />
+      ) : (
+        <h1>Sorry you need to login</h1>
+      )}
     </div>
   );
 }

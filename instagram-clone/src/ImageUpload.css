@@ -6,7 +6,11 @@ margin-left: auto;
 margin-right:auto;
 margin-top:10px;
 margin-bottom: 10px;
-position: fixed;
+/* position: fixed; */
 background-color: white;
-border: 1px solid gray;
+border: 1px solid #808080;
+}
+
+.imageupload__progress{
+
 }
