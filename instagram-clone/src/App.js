@@ -5,6 +5,7 @@ import firebase from "firebase";
 import { db, auth } from "./firebase";
 import { Button, Input, makeStyles, Modal } from "@material-ui/core";
 import ImageUpload from "./ImageUpload";
+import InstagramEmbed from "react-instagram-embed";
 
 function getModalStyle() {
   const top = 50;
@@ -127,7 +128,8 @@ function App() {
   return (
     <div className="app">
       <div className="app__header">
-        <img className="app__headerImage"
+        <img
+          className="app__headerImage"
           alt="Instagram"
           height="70px"
           src="https://upload.wikimedia.org/wikipedia/commons/0/06/%C4%B0nstagram-Profilime-Kim-Bakt%C4%B1-1.png"
@@ -149,14 +151,31 @@ function App() {
         )}
       </div>
 
-      {posts.map(({ id, post }) => (
-        <Post
-          key={id}
-          username={post.username}
-          caption={post.caption}
-          imageUrl={post.imageUrl}
-        ></Post>
-      ))}
+      <div className="app__posts">
+        {posts.map(({ id, post }) => (
+          <Post
+            key={id}
+            postid={id}
+            username={post.username}
+            caption={post.caption}
+            imageUrl={post.imageUrl}
+          ></Post>
+        ))}
+      </div>
+
+      <InstagramEmbed
+  url='https://instagr.am/p/CNt2EwcBQSG/'
+  clientAccessToken="123|456"
+        maxWidth={320}
+        hideCaption={false}
+        containerTagName="div"
+        protocol=""
+        injectScript
+        onLoading={() => {}}
+        onSuccess={() => {}}
+        onAfterRender={() => {}}
+        onFailure={() => {}}
+      />
 
       <Modal open={openSignUp} onClose={handleClosePopupSignUp}>
         <div style={modalStyle} className={classes.paper}>

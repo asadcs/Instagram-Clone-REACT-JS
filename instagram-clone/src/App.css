@@ -17,12 +17,14 @@
 }
 .app__headerImage{
   object-fit: contain;
-
-  
 }
 
 .app__signup{
   display:flex  !important;
   flex-direction: column  !important;
   text-align: center;
+}
+
+.app__posts{
+padding:20px;
 }
