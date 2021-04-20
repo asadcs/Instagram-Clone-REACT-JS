@@ -15,6 +15,10 @@
   
   
 }
+.app__postsright{
+  margin-left: 20px;
+}
+
 .app__headerImage{
   object-fit: contain;
 }

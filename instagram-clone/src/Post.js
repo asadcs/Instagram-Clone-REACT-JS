@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Post.css";
 import { Avatar, Button, Input } from "@material-ui/core";
 import { db } from "./firebase";
+import firebase from "firebase";
 
 function Post({ postid, username, caption, imageUrl }) {
   const [comments, setComments] = useState([]);
@@ -14,7 +15,7 @@ function Post({ postid, username, caption, imageUrl }) {
         .collection("posts")
         .doc(postid)
         .collection("comments")
-        //.orderBy("timestamp", "desc")
+        .orderBy("timestamp", "asc")
         .onSnapshot((snapshot) => {
           setComments(
             // snapshot.docs.map((doc) => ({
@@ -33,6 +34,26 @@ function Post({ postid, username, caption, imageUrl }) {
       unsubscribe();
     };
   }, [postid]);
+
+
+  const handlePostCommentsProcess = (event) => {
+    // all the logic to send the message
+    event.preventDefault(); // prevent form to refresh the page
+
+    db.collection("posts")
+    .doc(postid)
+    .collection("comments").add({
+      username: username,
+      text: comment,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+
+setComment('')
+
+  }
+
+
+
   return (
     <div className="post">
       <div className="post__header">
@@ -64,8 +85,8 @@ function Post({ postid, username, caption, imageUrl }) {
         <Button
           type="submit"
           className="post__button"
-
-          // onClick={handleSignupProcess}
+          disabled={!comment}
+           onClick={handlePostCommentsProcess}
         >
           Post
         </Button>
